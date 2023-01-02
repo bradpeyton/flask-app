@@ -6,7 +6,7 @@ ENV FLASK_APP=app.py
 # ENV FLASK_RUN_HOST=0.0.0.0
 RUN apt update
 RUN apt upgrade -y
-RUN apt install gcc musl-dev linux-headers -y
+# RUN apt install gcc musl-dev linux-headers -y
 RUN apt install python3 -y
 RUN apt install python3-pip -y
 RUN apt install python-dev -y
