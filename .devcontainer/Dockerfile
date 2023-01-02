@@ -3,12 +3,16 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu
 # WORKDIR .
 ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-# RUN apt install gcc musl-dev linux-headers
-RUN sudo apt install python3
+# ENV FLASK_RUN_HOST=0.0.0.0
+RUN apt update
+RUN apt upgrade -y
+RUN apt install gcc musl-dev linux-headers -y
+RUN apt install python3 -y
+RUN apt install python3-pip -y
+RUN apt install python-dev -y
 RUN pip install -U pip
 COPY . .
 RUN pip install -r requirements.txt
 EXPOSE 5000
-# CMD ["flask", "run"]
 RUN flask run
+# CMD ["flask", "run"]
