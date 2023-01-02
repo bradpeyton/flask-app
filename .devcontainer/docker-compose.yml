@@ -1,5 +1,7 @@
 services:
   devcontainer:
+    container_name: devbox
+    hostname: devbox
     build: 
       context: .
       dockerfile: Dockerfile
@@ -7,9 +9,15 @@ services:
       - ../..:/workspaces:cached      
     network_mode: service:db
     command: sleep infinity
+    ports:
+      - '5000:5000'
+    expose:
+      - '5000'
     
   db:
     image: mysql:8.0-debian
+    container_name: mysql
+    hostname: mysql
     restart: unless-stopped
     volumes:
       - mysql-data:/var/lib/mysql
