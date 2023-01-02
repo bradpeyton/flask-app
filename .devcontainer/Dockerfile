@@ -9,10 +9,9 @@ RUN apt upgrade -y
 # RUN apt install gcc musl-dev linux-headers -y
 RUN apt install python3 -y
 RUN apt install python3-pip -y
-RUN apt install python-dev -y
+# RUN apt install python-dev -y
 RUN pip install -U pip
 COPY . .
 RUN pip install -r requirements.txt
 EXPOSE 5000
-RUN flask run
-# CMD ["flask", "run"]
+CMD ["flask", "run"]
