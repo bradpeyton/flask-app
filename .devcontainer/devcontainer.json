@@ -15,12 +15,12 @@
       "extensions": [
         "ms-python.python",
         "ms-python.pylint",
-        "ms-python.autopep8",
         "esbenp.prettier-vscode",
         "sidthesloth.html5-boilerplate",
         "VisualStudioExptTeam.vscodeintellicode",
         "VisualStudioExptTeam.intellicode-api-usage-examples",
-        "wholroyd.jinja"
+        "wholroyd.jinja",
+        "ms-azuretools.vscode-docker"
       ]
     }
   }

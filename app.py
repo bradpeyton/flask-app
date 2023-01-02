@@ -17,11 +17,11 @@ CREATE_TABLE = """DROP TABLE IF EXISTS users;
                 first_name VARCHAR(40) NOT NULL,
                 age INT)"""
 
-res = cursorObject.execute(CREATE_TABLE)
+cursorObject.execute(CREATE_TABLE)
 
 DATABASE.close()
 
-print(res)
+# print(res)
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
