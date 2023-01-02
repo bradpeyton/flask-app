@@ -1,7 +1,6 @@
 services:
   devcontainer:
-    container_name: devbox
-    hostname: devbox
+    container_name: devcontainer
     build: 
       context: .
       dockerfile: Dockerfile
