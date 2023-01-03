@@ -35,11 +35,11 @@
             </tr>
           </thead>
           <tbody class="table-group-divider">
-            {% for i in range(0, len) %}
+            {% for person in people %}
             <tr>
-              <th scope="row">{{ i }}</th>
-              <td>{{ people[i]['name'] }}</td>
-              <td>{{ people[i]['age'] }}</td>
+                <td>{{ person['key'] }}</td>
+                <td>{{ person['name'] }}</td>
+                <td>{{ person['age'] }}</td>
             </tr>
             {% endfor %}
           </tbody>

@@ -11,17 +11,15 @@ DATABASE = mysql.connector.connect(
 
 cursorObject = DATABASE.cursor()
 
-CREATE_TABLE = """DROP TABLE IF EXISTS users;
-                CREATE TABLE users (
-                id INT AUTO_INCREMENT PRIMARY KEY, 
-                first_name VARCHAR(40) NOT NULL,
-                age INT)"""
+DROP_TABLE = """DROP TABLE IF EXISTS `users`;"""
+CREATE_TABLE = """CREATE TABLE `users` (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                first_name VARCHAR(40) NOT NULL, age INT);"""
 
+cursorObject.execute(DROP_TABLE)
 cursorObject.execute(CREATE_TABLE)
-
-DATABASE.close()
-
-# print(res)
+DATABASE.commit()
+cursorObject.close()
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -41,17 +39,49 @@ class Person:
         print(self.name, self.age)
 
 
-people = []
 
 try:
     with open(FILE, "r", encoding="utf-8") as file:
+        cursorObject = DATABASE.cursor()
         reader = csv.DictReader(file)
+
         for row in reader:
-            # print(row['name'], row['age'])
+            QUERY = "INSERT INTO `users` (first_name, age) VALUES (%s, %s);"
+            VALUES = (row['name'].capitalize(), row['age'])
+            cursorObject.execute(QUERY, VALUES)
             # row['name'] = Person(row['name'].capitalize(), row['age'])
-            people.append(row)
+            # people.append(row)
+
+        DATABASE.commit()
+        cursorObject.close()
+        DATABASE.close()
+
 except ValueError:
     print("There was an error")
+
+
+DATABASE = mysql.connector.connect(
+    host='mysql',
+    user='root',
+    password='secret',
+    database='ecomm'
+)
+cursorObject = DATABASE.cursor()
+QUERY = "SELECT * FROM `users`;"
+cursorObject.execute(QUERY)
+result = cursorObject.fetchall()
+cursorObject.close()
+DATABASE.close()
+
+people = []
+
+for key, name, age in result:
+    person = {'key': key, 'name': name, 'age': age}
+    people.append(person)
+
+
+for person in people:
+    print(person['key'], person['name'], person['age'])
 
 # for person in people:
 #     if person['name'] == 'Brad':
@@ -84,9 +114,9 @@ except ValueError:
 
 @ app.route("/")
 def index():
-    name = request.args.get("name")
-    if name:
-        name.lower()
+    # name = request.args.get("name")
+    # if name:
+        # name.lower()
     # for person in people:
     #     if person['name'] == name:
     #         age = person['age']
