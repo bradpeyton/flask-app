@@ -1,25 +1,27 @@
 import csv
-from flask import Flask, request, render_template
-import mysql.connector
+from flask import Flask, render_template
+from mysql.connector import connect, Error
+from config import mysql
 
-DATABASE = mysql.connector.connect(
-    host='mysql',
-    user='root',
-    password='secret',
-    database='ecomm'
-)
+try:
+    DATABASE = connect(**mysql)
+except Error as error_message:
+    print(error_message)
 
-cursorObject = DATABASE.cursor()
-
-DROP_TABLE = """DROP TABLE IF EXISTS `users`;"""
-CREATE_TABLE = """CREATE TABLE `users` (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                first_name VARCHAR(40) NOT NULL, age INT);"""
-
-cursorObject.execute(DROP_TABLE)
-cursorObject.execute(CREATE_TABLE)
-DATABASE.commit()
-cursorObject.close()
+DROP_TABLE = "DROP TABLE IF EXISTS `users`"
+CREATE_TABLE = """
+                CREATE TABLE `users` (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    first_name VARCHAR(40) NOT NULL,
+                    age INT
+                )
+               """
+try:
+    with DATABASE.cursor() as cursor:
+        cursor.execute(DROP_TABLE)
+        cursor.execute(CREATE_TABLE)
+except Error as error_message:
+    print(error_message)
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -39,38 +41,37 @@ class Person:
         print(self.name, self.age)
 
 
-
 try:
     with open(FILE, "r", encoding="utf-8") as file:
-        cursorObject = DATABASE.cursor()
+        cursor = DATABASE.cursor()
         reader = csv.DictReader(file)
 
         for row in reader:
             QUERY = "INSERT INTO `users` (first_name, age) VALUES (%s, %s);"
             VALUES = (row['name'].capitalize(), row['age'])
-            cursorObject.execute(QUERY, VALUES)
+            cursor.execute(QUERY, VALUES)
             # row['name'] = Person(row['name'].capitalize(), row['age'])
             # people.append(row)
 
         DATABASE.commit()
-        cursorObject.close()
-        DATABASE.close()
+        # cursor.close()
+        # DATABASE.close()
 
 except ValueError:
     print("There was an error")
 
 
-DATABASE = mysql.connector.connect(
-    host='mysql',
-    user='root',
-    password='secret',
-    database='ecomm'
-)
-cursorObject = DATABASE.cursor()
+# DATABASE = connect(
+#     host='mysql',
+#     user='root',
+#     password='secret',
+#     database='ecomm'
+# )
+# cursorObject = DATABASE.cursor()
 QUERY = "SELECT * FROM `users`;"
-cursorObject.execute(QUERY)
-result = cursorObject.fetchall()
-cursorObject.close()
+cursor.execute(QUERY)
+result = cursor.fetchall()
+cursor.close()
 DATABASE.close()
 
 people = []
@@ -116,7 +117,7 @@ for person in people:
 def index():
     # name = request.args.get("name")
     # if name:
-        # name.lower()
+    # name.lower()
     # for person in people:
     #     if person['name'] == name:
     #         age = person['age']
