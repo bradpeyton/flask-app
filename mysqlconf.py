@@ -1,4 +1,4 @@
-mysql = {
+kwargs = {
     'user' : 'root',
     'password' : 'secret',
     'host' : 'mysql',

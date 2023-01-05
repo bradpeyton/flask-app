@@ -1,0 +1,4 @@
+host: 'mysql'
+user: 'root'
+pass: 'secret'
+db: 'ecomm'
