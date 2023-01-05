@@ -4,5 +4,6 @@ kwargs = {
     'host' : 'mysql',
     'database' : 'ecomm',
     'raise_on_warnings' : True,
-    'use_pure' : False
+    'use_pure' : False,
+    'time_zone' : '-08:00'
 }
